@@ -23,13 +23,12 @@ namespace FacebookInformationPoster
             builder.RegisterInstance(configuration).As<IDictionary<string, string>>();
             builder.RegisterType<UpdateStatus>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<GetWikipediaLink>().AsSelf().InstancePerLifetimeScope();
-            builder.RegisterType<Writer>().AsSelf().SingleInstance();
             builder.RegisterType<PostRandomWikipediaArticle>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
             builder.RegisterType<FileWrapper>().As<IFile>().SingleInstance();
             builder.RegisterType<DirectoryWrapper>().As<IDirectory>().SingleInstance();
             builder.RegisterType<PathWrapper>().As<IPath>().SingleInstance();
-            builder.RegisterType<WikipediaTopicLinkAccessor>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<WikipediaLinkScraper>().AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterDecorator<CachingWikipediaTopicLinkAccessor, IWikipediaTopicLinkAccessor>();
         }
 

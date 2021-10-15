@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Serilog;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -11,21 +13,24 @@ namespace FacebookInformationPoster
     {
         static void Main(string[] args)
         {
-            using var scope = ConfigureContainer()
-                .BeginLifetimeScope();
+            var logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
 
+            logger.Information("application has started.");
+
+            var builder = new ContainerBuilder();
+            builder.RegisterInstance(logger).AsImplementedInterfaces();
+            builder.RegisterAssemblyModules(Assembly.GetEntryAssembly());
+            var container = builder.Build();
+
+            using var scope = container.BeginLifetimeScope();
+
+            logger.Information("starting timers.");
             foreach (var timer in scope.Resolve<IEnumerable<IAsyncTimerAction>>())
                 timer.Start();
 
             Console.ReadKey();
-        }
-
-        private static IContainer ConfigureContainer()
-        {
-            var builder = new ContainerBuilder();
-            builder.RegisterAssemblyModules(Assembly.GetEntryAssembly());
-            var container = builder.Build();
-            return container;
         }
     }
 }
