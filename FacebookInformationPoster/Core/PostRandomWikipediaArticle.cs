@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -23,7 +24,8 @@ namespace FacebookInformationPoster
             var article = _getWikipediaLink.Get();
             _updateStatus.Update(new StringBuilder()
                 .AppendLine($"Today's random Wikipedia article: \"{article.Title}\"")
-                .AppendLine($"{article.Paragraphs.First()}")
+                .AppendJoin(Environment.NewLine + Environment.NewLine, article.Paragraphs.Where(x => !string.IsNullOrWhiteSpace(x)).Take(2))
+                .AppendLine()
                 .AppendLine($"{article.Url}")
                 .ToString());
         }

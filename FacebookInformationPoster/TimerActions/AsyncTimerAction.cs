@@ -29,7 +29,7 @@ namespace FacebookInformationPoster
         public void Start()
         {
             OnConfiguring(_options);
-
+            
             var oneDay = TimeSpan.FromDays(1);
 
             var mainTimer = new Timer(ModTimeSpan(_options.StartOffset - DateTime.Now.TimeOfDay, oneDay).TotalMilliseconds);

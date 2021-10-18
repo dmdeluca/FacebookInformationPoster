@@ -21,7 +21,7 @@ namespace FacebookInformationPoster
             options.ActionInterval = TimeSpan.FromHours(3);
             options.Limit = 1;
             options.LimitSpan = TimeSpan.FromDays(1);
-            options.StartOffset = new TimeSpan(hours: 5 + 12, minutes: 0, seconds: 0);
+            options.StartOffset = new TimeSpan(hours: 7 + 12, minutes: 11, seconds: 0);
         }
     }
 }
