@@ -10,19 +10,22 @@ namespace FacebookInformationPoster
     {
         private readonly IWebDriver _webDriver;
         private readonly IDictionary<string, string> _env;
+        private readonly IFacebookLoginPage _facebookLoginPage;
 
-        public UpdateStatus(IWebDriver webDriver, IDictionary<string, string> env)
+        public UpdateStatus(IWebDriver webDriver, IDictionary<string, string> env, IFacebookLoginPage facebookLoginPage)
         {
             _webDriver = webDriver;
             _env = env;
+            _facebookLoginPage = facebookLoginPage;
         }
 
         public void Update(string status)
         {
-            _webDriver.Navigate().GoToUrl("https://m.facebook.com");
-            _webDriver.FindElement(By.Id("m_login_email")).SendKeys(_env[Env.B64FBNUMBER]);
-            _webDriver.FindElement(By.Id("m_login_password")).SendKeys(_env[Env.B64FBPASS]);
-            _webDriver.FindElement(By.Name("login")).Click();
+            _facebookLoginPage.Go(); 
+            _facebookLoginPage.LoginTextBox.SendKeys(_env[Env.B64FBNUMBER]);
+            _facebookLoginPage.PassTextBox.SendKeys(_env[Env.B64FBPASS]);
+            _facebookLoginPage.SubmitButton.Click();
+
             _webDriver.FindElement(By.XPath("//*[text()[contains(.,'Not Now')]]/..")).Click();
             _webDriver.FindElement(By.XPath("//*[text()[contains(.,'on your mind')]]")).Click();
             _webDriver.FindElement(By.CssSelector("textarea.composerInput")).SendKeys(status);
