@@ -1,5 +1,4 @@
-﻿using OpenQA.Selenium;
-using Serilog;
+﻿using Serilog;
 using System.Collections.Generic;
 
 namespace FacebookInformationPoster

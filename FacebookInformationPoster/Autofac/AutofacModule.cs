@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,15 +21,22 @@ namespace FacebookInformationPoster
             var configuration = typeof(Env).GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .ToDictionary(x => x.Name, x => RegisterEnvironmentVariable(x));
 
+            builder.Register((c, p) =>
+            {
+                return new RestClient();
+            })
+                .As<IRestClient>()
+                .InstancePerDependency();
+
             builder.RegisterInstance(configuration).As<IDictionary<string, string>>();
-            builder.RegisterType<UpdateStatus>().AsSelf().InstancePerLifetimeScope();
-            builder.RegisterType<GetWikipediaLink>().AsSelf().InstancePerLifetimeScope();
-            builder.RegisterType<PostRandomWikipediaArticle>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<UpdateStatus>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<GetWikipediaLink>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<PostRandomWikipediaArticle>().AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterType<FileSystem>().As<IFileSystem>().SingleInstance();
             builder.RegisterType<FileWrapper>().As<IFile>().SingleInstance();
             builder.RegisterType<DirectoryWrapper>().As<IDirectory>().SingleInstance();
             builder.RegisterType<PathWrapper>().As<IPath>().SingleInstance();
-            builder.RegisterType<WikipediaLinkScraper>().AsImplementedInterfaces().InstancePerLifetimeScope();
+            builder.RegisterType<WikipediaApiLinkRetriever>().AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterDecorator<CachingWikipediaTopicLinkAccessor, IWikipediaTopicLinkAccessor>();
         }
 
