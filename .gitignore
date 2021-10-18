@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 .vscode/tasks.json
 .gitignore
+.vscode/launch.json
