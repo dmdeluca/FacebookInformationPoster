@@ -1,5 +1,7 @@
-﻿using Autofac.Extras.Moq;
+﻿using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
+using RestSharp;
 using System.Collections.Generic;
 using Xunit;
 

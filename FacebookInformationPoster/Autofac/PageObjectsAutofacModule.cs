@@ -9,6 +9,10 @@ namespace FacebookInformationPoster
             builder.RegisterType<WhatLinksHerePage>()
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
+                
+            builder.RegisterType<FacebookLoginPage>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
         }
     }
 }
