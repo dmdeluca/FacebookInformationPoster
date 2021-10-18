@@ -8,29 +8,33 @@ namespace FacebookInformationPoster
 {
     public class UpdateStatus : IUpdateStatus
     {
-        private readonly IWebDriver _webDriver;
         private readonly IDictionary<string, string> _env;
         private readonly IFacebookLoginPage _facebookLoginPage;
+        private readonly IFacebookFeedPage _facebookFeedPage;
 
-        public UpdateStatus(IWebDriver webDriver, IDictionary<string, string> env, IFacebookLoginPage facebookLoginPage)
+        public UpdateStatus(
+            IDictionary<string, string> env,
+            IFacebookLoginPage facebookLoginPage,
+            IFacebookFeedPage facebookFeedPage)
         {
-            _webDriver = webDriver;
             _env = env;
             _facebookLoginPage = facebookLoginPage;
+            _facebookFeedPage = facebookFeedPage;
         }
 
         public void Update(string status)
         {
-            _facebookLoginPage.Go(); 
+            _facebookLoginPage.Go();
+
             _facebookLoginPage.LoginTextBox.SendKeys(_env[Env.B64FBNUMBER]);
             _facebookLoginPage.PassTextBox.SendKeys(_env[Env.B64FBPASS]);
             _facebookLoginPage.SubmitButton.Click();
+            _facebookLoginPage.NotNowButton.Click();
 
-            _webDriver.FindElement(By.XPath("//*[text()[contains(.,'Not Now')]]/..")).Click();
-            _webDriver.FindElement(By.XPath("//*[text()[contains(.,'on your mind')]]")).Click();
-            _webDriver.FindElement(By.CssSelector("textarea.composerInput")).SendKeys(status);
+            _facebookFeedPage.StatusBox.Click();
+            _facebookFeedPage.StatusInput.SendKeys(status);
             Thread.Sleep(2000);
-            _webDriver.FindElement(By.CssSelector("#composer-main-view-id button")).Click();
+            _facebookFeedPage.Submit.Click();
         }
     }
 }

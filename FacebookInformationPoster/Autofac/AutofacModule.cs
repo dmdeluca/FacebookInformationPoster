@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.Extensions.Configuration;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,14 @@ namespace FacebookInformationPoster
 
             var configuration = typeof(Env).GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .ToDictionary(x => x.Name, x => RegisterEnvironmentVariable(x));
+
+            var configurationFromJson = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            builder.RegisterInstance(configurationFromJson)
+                .As<IConfiguration>()
+                .SingleInstance();
 
             builder.Register((c, p) =>
             {

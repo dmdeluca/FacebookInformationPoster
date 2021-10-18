@@ -7,6 +7,7 @@ namespace FacebookInformationPoster
         IWebElement LoginTextBox { get; }
         IWebElement PassTextBox { get; }
         IWebElement SubmitButton { get; }
+        IWebElement NotNowButton { get; }
 
         void Go();
     }

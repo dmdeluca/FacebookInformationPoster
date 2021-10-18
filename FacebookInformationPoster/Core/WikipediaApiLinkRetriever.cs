@@ -1,18 +1,9 @@
-﻿using RestSharp;
-using RestSharp.Authenticators;
-using RestSharp.Deserializers;
-using RestSharp.Serialization;
+﻿using Microsoft.Extensions.Configuration;
+using RestSharp;
 using Serilog;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Cache;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace FacebookInformationPoster
 {
@@ -21,11 +12,11 @@ namespace FacebookInformationPoster
         private readonly IRestClient _restClient;
         private readonly ILogger _logger;
 
-        public WikipediaApiLinkRetriever(IRestClient restClient, ILogger logger)
+        public WikipediaApiLinkRetriever(IRestClient restClient, ILogger logger, IConfiguration configuration)
         {
             _restClient = restClient;
             _logger = logger;
-            _restClient.BaseUrl = new System.Uri("https://en.wikipedia.org/w/api.php");
+            _restClient.BaseUrl = new System.Uri(configuration.GetSection("WikipediaApiBaseUrl").Value);
         }
 
         public List<string> GetHrefs(string topic)
