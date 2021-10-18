@@ -13,16 +13,19 @@ namespace FacebookInformationPoster
             builder.Register((c, p) =>
             {
                 var location = c.Resolve<IDictionary<string, string>>()["CHROMEDRIVER_LOCATION"];
-                var chromeDriver = new ChromeDriver(location, new ChromeOptions()
+                ChromeOptions options = new()
                 {
                     UnhandledPromptBehavior = UnhandledPromptBehavior.Dismiss
-                });
+                };
+                //options.AddArgument("headless");
+                var chromeDriver = new ChromeDriver(location, options);
                 chromeDriver.Manage()
                     .Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
                 return chromeDriver;
             })
                 .As<IWebDriver>()
-                .InstancePerLifetimeScope();
+                .InstancePerLifetimeScope()
+                .OnRelease(x => x.Quit());
         }
     }
 }
