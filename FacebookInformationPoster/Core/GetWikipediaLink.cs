@@ -23,7 +23,7 @@ namespace FacebookInformationPoster
 
         public WikipediaArticle Get()
         {
-            var links = _file.ReadAllText("topics")
+            var links = _file.ReadAllText("Configuration/topics")
                 .ToLower()
                 .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
                 .SelectMany(x => _wikipediaTopicLinkAccessor.GetHrefs(x))
