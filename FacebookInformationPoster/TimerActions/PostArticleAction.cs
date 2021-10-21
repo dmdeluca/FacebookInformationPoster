@@ -1,27 +1,23 @@
-﻿using System;
+﻿using Autofac;
+using System;
 
 namespace FacebookInformationPoster
 {
-    public class PostArticleAction : AsyncTimerAction
+    public class PostArticleAction : IScheduledTask
     {
-        private readonly IPostRandomWikipediaArticle _postRandomWikipediaArticle;
+        private readonly ILifetimeScope _lifetimeScope;
 
-        public PostArticleAction(IPostRandomWikipediaArticle postRandomWikipediaArticle)
+        public PostArticleAction(ILifetimeScope lifetimeScope)
         {
-            _postRandomWikipediaArticle = postRandomWikipediaArticle;
+            _lifetimeScope = lifetimeScope;
         }
 
-        public override void Action()
-        {
-            _postRandomWikipediaArticle.Post();
-        }
+        public string Name => "Post";
 
-        public override void OnConfiguring(AsyncTimerActionOptions options)
+        public void Execute()
         {
-            options.ActionInterval = TimeSpan.FromHours(3);
-            options.Limit = 1;
-            options.LimitSpan = TimeSpan.FromDays(1);
-            options.StartOffset = new TimeSpan(hours: 7 + 12, minutes: 11, seconds: 0);
+            using var scope = _lifetimeScope.BeginLifetimeScope();
+            scope.Resolve<IPostRandomWikipediaArticle>().Post();
         }
     }
 }

@@ -33,6 +33,8 @@ namespace FacebookInformationPoster
 
             _facebookFeedPage.StatusBox.Click();
             _facebookFeedPage.StatusInput.SendKeys(status);
+
+            // let the rich link be created.
             Thread.Sleep(2000);
             _facebookFeedPage.Submit.Click();
         }

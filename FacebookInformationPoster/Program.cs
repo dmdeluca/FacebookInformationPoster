@@ -27,8 +27,7 @@ namespace FacebookInformationPoster
             using var scope = container.BeginLifetimeScope();
 
             logger.Information("starting timers.");
-            foreach (var timer in scope.Resolve<IEnumerable<IAsyncTimerAction>>())
-                timer.Start();
+            scope.Resolve<IScheduler>().StartPolling();
 
             Console.ReadKey();
         }

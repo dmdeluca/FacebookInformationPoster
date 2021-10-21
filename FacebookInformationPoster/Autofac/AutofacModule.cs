@@ -23,17 +23,14 @@ namespace FacebookInformationPoster
                 .ToDictionary(x => x.Name, x => RegisterEnvironmentVariable(x));
 
             var configurationFromJson = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("Configuration/appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
             builder.RegisterInstance(configurationFromJson)
                 .As<IConfiguration>()
                 .SingleInstance();
 
-            builder.Register((c, p) =>
-            {
-                return new RestClient();
-            })
+            builder.Register((c, p) => new RestClient())
                 .As<IRestClient>()
                 .InstancePerDependency();
 

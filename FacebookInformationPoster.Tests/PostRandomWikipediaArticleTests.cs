@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using RestSharp;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace FacebookInformationPoster.Tests
@@ -35,6 +36,23 @@ namespace FacebookInformationPoster.Tests
             // assert
             am.Mock<IUpdateStatus>()
                 .Verify(x => x.Update(It.Is<string>(y => y.Contains("Lorem") && y.Contains(article.Title) && y.Contains(article.Url))), Times.Once);
+        }
+    }
+
+    public class RestRequestToStringTests
+    {
+        [Fact]
+        public void RestRequestToStringTest()
+        {
+            var request = new RestRequest()
+                .AddQueryParameter("prop", "linkshere")
+                .AddQueryParameter("action", "query")
+                .AddQueryParameter("format", "json")
+                .AddQueryParameter("lhshow", "!redirect")
+                .AddQueryParameter("lhlimit", "max")
+                .AddQueryParameter("titles", "philosophy");
+
+            var stringified = "?" + request.Parameters.Select(x => $"{x.Name}={x.Value}").Aggregate((x, y) => $"{x}&{y}");
         }
     }
 }

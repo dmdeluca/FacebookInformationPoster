@@ -40,7 +40,8 @@ namespace FacebookInformationPoster
                     request.AddQueryParameter("lhcontinue", lhcontinue)
                         .AddQueryParameter("continue", @continue);
 
-                _logger.Information($"sending request: {request}");
+                var stringified = "?" + request.Parameters.Select(x => $"{x.Name}={x.Value}").Aggregate((x, y) => $"{x}&{y}");
+                _logger.Information($"sending request: {_restClient.BaseUrl}{stringified}");
 
                 var response = _restClient.Get(request);
                 var json = JsonDocument.Parse(response.Content);

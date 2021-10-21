@@ -3,7 +3,7 @@ using System;
 
 namespace FacebookInformationPoster
 {
-    public class PingAction : AsyncTimerAction
+    public class PingAction : IScheduledTask
     {
         private readonly ILogger _writer;
 
@@ -12,14 +12,11 @@ namespace FacebookInformationPoster
             _writer = writer;
         }
 
-        public override void Action()
+        public string Name => "Ping";
+
+        public void Execute()
         {
             _writer.Information("ping");
-        }
-
-        public override void OnConfiguring(AsyncTimerActionOptions options)
-        {
-            options.ActionInterval = TimeSpan.FromMinutes(1) / 10;
         }
     }
 }
